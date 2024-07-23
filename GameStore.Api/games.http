@@ -1,0 +1,29 @@
+GET http://localhost:5110/games
+
+###
+GET http://localhost:5110/games/1
+
+###
+POST http://localhost:5110/games
+Content-Type: application/json
+
+{
+  "name": "Need For Speed",
+  "genreId": 3,
+  "price": 9.99,
+  "releaseDate": "2023-03-05"
+}
+
+###
+PUT http://localhost:5110/games/1
+Content-Type: application/json
+
+{
+  "name": "Final Action",
+  "genreId": 3,
+  "price": 59.99,
+  "releaseDate": "2010-09-30"
+}
+
+###
+DELETE http://localhost:5110/games/2

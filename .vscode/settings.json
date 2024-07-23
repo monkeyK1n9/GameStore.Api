@@ -1,0 +1,12 @@
+{
+  "dotnet.defaultSolution": "GameStore.sln",
+  "sqltools.useNodeRuntime": true,
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "GameStore",
+      "database": "${workspaceFolder:GameStore}/GameStore.Api/GameStore.db"
+    }
+  ]
+}
