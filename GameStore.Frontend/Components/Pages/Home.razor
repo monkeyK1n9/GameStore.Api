@@ -3,40 +3,52 @@
 
 <PageTitle>Game Catalog</PageTitle>
 
-<table>
-    <thead>
+<table class="table table-striped table-bordered table-hover">
+    <thead class="table-dark">
         <th>Id</th>
         <th>Name</th>
         <th>Genre</th>
-        <th>Price</th>
+        <th class="text-end">Price</th>
         <th>Release date</th>
         <th></th>
     </thead>
+    <tbody>
+        @foreach (var game in games)
+        {
+            <tr>
+                <td>@game.Id</td>
+                <td>@game.Name</td>
+                <td>@game.Genre</td>
+                <td class="text-end">@game.Price.ToString("C2")</td>
+                <td>@game.ReleaseDate</td>
+            </tr>
+        }
+    </tbody>
 </table>>
 
 
 @code {
     private GameSummary[] games = [
-        new() {
-            Id = 1,
-            Name = "Street Fighter II",
-            Genre = "Fighting",
-            Price = 29.99M,
-            ReleaseDate = new DateOnly(1992, 6, 6)
-        },
-        new () {
-            Id = 2,
-            Name = "Final Fantasy XVII",
-            Genre = "Roleplaying",
-            Price = 59.99M,
-            ReleaseDate = new DateOnly(2010, 9, 30)
-        },
-        new () {
-            Id = 3,
-            Name = "FIFA 20",
-            Genre = "Sports",
-            Price = 69.99M,
-            ReleaseDate = new DateOnly(2019, 9, 27)
-        }
+    new() {
+Id = 1,
+Name = "Street Fighter II",
+Genre = "Fighting",
+Price = 29.99M,
+ReleaseDate = new DateOnly(1992, 6, 6)
+},
+new () {
+Id = 2,
+Name = "Final Fantasy XVII",
+Genre = "Roleplaying",
+Price = 59.99M,
+ReleaseDate = new DateOnly(2010, 9, 30)
+},
+new () {
+Id = 3,
+Name = "FIFA 20",
+Genre = "Sports",
+Price = 69.99M,
+ReleaseDate = new DateOnly(2019, 9, 27)
+}
     ];
 }
