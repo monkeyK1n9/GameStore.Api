@@ -5,7 +5,7 @@ namespace GameStore.Frontend.Clients;
 
 public class GamesClient
 {
-    private readonly List<GameSummary> games =
+    private readonly List<GameSummary> _games =
     [
         new() {
             Id = 1,
@@ -30,5 +30,23 @@ public class GamesClient
         }
     ];
 
-    public GameSummary[] GetGames() => [.. games];
+    private readonly Genre[] genres = new GenresClient().GetGenres();
+
+    public GameSummary[] GetGames() => [.. _games];
+
+    public void AddGame(GameDetails gameDetails)
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(gameDetails.GenreId);
+
+        var genre = genres.Single(genre => genre.Id == int.Parse(gameDetails.GenreId));
+
+        var gameSummary = new GameSummary
+        {
+            Id = _games.Count + 1,
+            Name = gameDetails.Name,
+            Genre = genre.Name,
+            Price = gameDetails.Price,
+            ReleaseDate = gameDetails.ReleaseDate,
+        };
+    }
 }
