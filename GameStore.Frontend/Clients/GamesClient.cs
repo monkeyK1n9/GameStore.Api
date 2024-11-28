@@ -48,5 +48,7 @@ public class GamesClient
             Price = gameDetails.Price,
             ReleaseDate = gameDetails.ReleaseDate,
         };
+
+        _games.Add(gameSummary);
     }
 }
