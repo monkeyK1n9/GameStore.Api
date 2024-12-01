@@ -1,13 +1,15 @@
 ﻿@page "/editgame";
+@page "/editgame/{id:int}";
+
 @inject NavigationManager NavigationManager;
 @inject GamesClient GamesClient;
 @inject GenresClient GenresClient;
 
-<PageTitle>New game</PageTitle>
+<PageTitle>@_title</PageTitle>
 
-<h3>New Game</h3>
+<h3>@_title</h3>
 
-@if (genres is null)
+@if (_genres is null || _game is null)
 {
     <p><em>Loading...</em></p>
 }
@@ -15,28 +17,34 @@ else
 {
     <div class="row">
         <div class="col-md-4">
-            <EditForm Model="@game" FormName="editGame" OnSubmit="HandleSubmit">
+            <EditForm Model="@_game" FormName="editGame" OnValidSubmit="HandleSubmit">
+                @* Permits to add validation on data entry *@
+                <DataAnnotationsValidator />
+                <ValidationSummary />
                 <div class="mb-3">
                     <label for="name" class="form-label">Name:</label>
-                    <InputText id="name" @bind-Value="game.Name" class="form-control" />
+                    <InputText id="name" @bind-Value="_game.Name" class="form-control" />
+                    <ValidationMessage For="() => _game.Name" />
                 </div>
                 <div class="mb-3">
                     <label for="genre" class="form-label">Genre:</label>
-                    <InputSelect id="genre" @bind-Value="game.GenreId" class="form-select">
+                    <InputSelect id="genre" @bind-Value="_game.GenreId" class="form-select">
                         <option value="">Select a genre</option>
-                        @foreach (var genre in genres)
+                        @foreach (var genre in _genres)
                         {
                             <option value="@genre.Id">@genre.Name</option>
                         }
                     </InputSelect>
+                    <ValidationMessage For="() => _game.GenreId" />
                 </div>
                 <div class="mb-3">
                     <label for="price" class="form-label">Price:</label>
-                    <InputNumber id="price" @bind-Value="game.Price" class="form-control" />
+                    <InputNumber id="price" @bind-Value="_game.Price" class="form-control" />
+                    <ValidationMessage For="() => _game.Price" />
                 </div>
                 <div class="mb-3">
                     <label for="releaseDate" class="form-label">Release date:</label>
-                    <InputDate id="releaseDate" @bind-Value="game.ReleaseDate" class="form-control" />
+                    <InputDate id="releaseDate" @bind-Value="_game.ReleaseDate" class="form-control" />
                 </div>
                 <button type="submit" class="btn btn-primary">Create Game</button>
                 <a href="/" role="button" class="btn btn-secondary"> Cancel</a>
@@ -46,23 +54,55 @@ else
 }
 
 @code {
-    [SupplyParameterFromForm]
-    private GameDetails game { get; set; } = new()
-        {
-            Name = string.Empty,
-            ReleaseDate = DateOnly.FromDateTime(DateTime.UtcNow)
-        };
+    [Parameter]
+    public int? Id { get; set; }
 
-    private Genre[]? genres;
+    [SupplyParameterFromForm]
+    private GameDetails? _game { get; set; }
+
+    private Genre[]? _genres;
+
+    private string _title = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        if (_game is not null) return;
+
+        if (Id is not null)
+        {
+            _game = GamesClient.GetGameDetailsById(Id.Value);
+            _title = $"Edit {_game.Name}";
+        }
+        else
+        {
+            _game = new()
+                {
+                    Name = string.Empty,
+                    ReleaseDate = DateOnly.FromDateTime(DateTime.UtcNow)
+                };
+            _title = "New Game";
+        }
+    }
 
     protected override void OnInitialized()
     {
-        genres = GenresClient.GetGenres();
+        _genres = GenresClient.GetGenres();
     }
 
     private void HandleSubmit()
     {
-        GamesClient.AddGame(game);
+        ArgumentNullException.ThrowIfNull(_game);
+
+        if (Id is null)
+        {
+            GamesClient.AddGame(_game);
+        }
+        else
+        {
+            _game.Id = Id.Value;
+            GamesClient.UpdateGame(_game);
+        }
+
         NavigationManager.NavigateTo("/");
     }
 }

@@ -20,7 +20,7 @@ else
             <th>Genre</th>
             <th class="text-end">Price</th>
             <th>Release date</th>
-            <th></th>
+            <th>Actions</th>
         </thead>
         <tbody>
             @foreach (var game in games)
@@ -31,6 +31,18 @@ else
                     <td>@game.Genre</td>
                     <td class="text-end">@game.Price.ToString("C2")</td>
                     <td>@game.ReleaseDate</td>
+                    <td>
+                        <div class="d-flex">
+                            <a class="btn btn-primary me-2" role="button" href="@GameUrl(game.Id)">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="@GetDeleteModalId(game)"
+                                role="button">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                            <DeleteGame Game="@game" />
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -44,5 +56,12 @@ else
     protected override void OnInitialized()
     {
         games = Client.GetGames();
+    }
+
+    private static string GameUrl(int id) => $"/editgame/{id}";
+
+    private static string GetDeleteModalId(GameSummary game)
+    {
+        return $"#{DeleteGame.GetModalId(game)}";
     }
 }
