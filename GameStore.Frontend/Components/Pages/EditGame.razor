@@ -1,9 +1,10 @@
-﻿@page "/editgame";
-@page "/editgame/{id:int}";
+﻿@page "/editgame"
+@page "/editgame/{id:int}"
+@rendermode InteractiveServer
 
-@inject NavigationManager NavigationManager;
-@inject GamesClient GamesClient;
-@inject GenresClient GenresClient;
+@inject NavigationManager NavigationManager
+@inject GamesClient GamesClient
+@inject GenresClient GenresClient
 
 <PageTitle>@_title</PageTitle>
 

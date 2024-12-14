@@ -3,7 +3,7 @@ using GameStore.Frontend.Models;
 
 namespace GameStore.Frontend.Clients;
 
-public class GamesClient
+public class GamesClient(HttpClient httpClient)
 {
     private readonly List<GameSummary> _games =
     [
@@ -30,7 +30,7 @@ public class GamesClient
         }
     ];
 
-    private readonly Genre[] _genres = new GenresClient().GetGenres();
+    private readonly Genre[] _genres = new GenresClient(httpClient).GetGenres();
 
     public GameSummary[] GetGames() => [.. _games];
 
