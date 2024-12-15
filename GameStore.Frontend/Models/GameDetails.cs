@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using GameStore.Frontend.Converters;
 
 namespace GameStore.Frontend.Models;
 
@@ -12,6 +14,7 @@ public class GameDetails
     public string Name { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "The Genre field is required.")]
+    [JsonConverter(typeof(StringConverter))] // this will convert the string back to int and reverse. See the StringConverter class we created as converter
     public string GenreId { get; set; } = string.Empty;
 
     [Range(1, 100)]

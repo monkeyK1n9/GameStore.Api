@@ -18,7 +18,7 @@ else
 {
     <div class="row">
         <div class="col-md-4">
-            <EditForm Model="@_game" FormName="editGame" OnValidSubmit="HandleSubmitAsync">
+            <EditForm Model="@_game" FormName="editGame" OnValidSubmit="HandleSubmitAsync" Enhance>
                 @* Permits to add validation on data entry *@
                 <DataAnnotationsValidator />
                 <ValidationSummary />
